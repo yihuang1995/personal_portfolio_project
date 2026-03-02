@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Yi Huang — Staff Data Scientist & ML Engineer Portfolio">
+  <title>Yi Huang | Data Scientist & ML Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <style>
+    /* =============================================
+       CSS CUSTOM PROPERTIES — edit here to retheme
+       ============================================= */
+    :root {
+      --bg:          #fafaf8;
+      --bg-warm:     #f3f0eb;
+      --ink:         #191917;
+      --ink-mid:     #3d3d39;
+      --ink-light:   #6a6a62;
+      --ink-muted:   #9a9a90;
+      --rule:        #deded4;
+      --gold:        #b07d2e;
+      --display:     'Playfair Display', Georgia, serif;
+      --body:        'Source Serif 4', Georgia, serif;
+
+      /* Typography — ALL sizes use clamp() */
+      --name-size:       clamp(2.8rem, 8vw, 6.5rem);
+      --tagline-size:    clamp(0.95rem, 2vw, 1.45rem);
+      --h2-size:         clamp(1.6rem, 3.8vw, 3rem);
+      --h3-size:         clamp(0.95rem, 1.8vw, 1.25rem);
+      --body-size:       clamp(0.78rem, 1.3vw, 1rem);
+      --small-size:      clamp(0.62rem, 0.95vw, 0.78rem);
+      --section-padding: clamp(1.5rem, 5vw, 5rem);
+      --content-gap:     clamp(0.6rem, 1.8vw, 1.6rem);
+    }
+
+    /* =============================================
+       RESET
+       ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* =============================================
+       VIEWPORT: MANDATORY
+       ============================================= */
+    html, body { height: 100%; overflow-x: hidden; }
+    html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--body);
+      font-size: var(--body-size);
+      color: var(--ink);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .section {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .section-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-height: 100%;
+      overflow: hidden;
+      padding: var(--section-padding);
+      max-width: min(90vw, 1180px);
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* =============================================
+       TYPOGRAPHY
+       ============================================= */
+    h1, h2, h3 { font-family: var(--display); }
+    h1 { font-size: var(--name-size);  font-weight: 700; line-height: 0.94; letter-spacing: -0.025em; }
+    h2 { font-size: var(--h2-size);   font-weight: 700; line-height: 1.08; }
+    h3 { font-size: var(--h3-size);   font-weight: 600; }
+    em { font-style: italic; }
+
+    .eyebrow {
+      font-family: var(--body);
+      font-size: var(--small-size);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--ink-muted);
+    }
+
+    /* =============================================
+       NAV DOTS
+       ============================================= */
+    .nav-dots {
+      position: fixed;
+      right: clamp(0.75rem, 2vw, 1.6rem);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      list-style: none;
+    }
+
+    .nav-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--rule);
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      display: block;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .nav-dot[aria-current="true"] {
+      background: var(--ink);
+      transform: scale(1.55);
+    }
+
+    .nav-dot:hover { background: var(--ink-mid); }
+
+    /* =============================================
+       ANIMATIONS / REVEAL
+       ============================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .reveal:nth-child(1) { transition-delay: 0.05s; }
+    .reveal:nth-child(2) { transition-delay: 0.15s; }
+    .reveal:nth-child(3) { transition-delay: 0.25s; }
+    .reveal:nth-child(4) { transition-delay: 0.35s; }
+    .reveal:nth-child(5) { transition-delay: 0.45s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { transition: opacity 0.3s ease; transform: none; }
+    }
+
+    /* =============================================
+       HERO
+       ============================================= */
+    #hero { background: var(--bg); }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 47px,
+        rgba(0,0,0,0.025) 47px,
+        rgba(0,0,0,0.025) 48px
+      );
+      animation: linesDrift 28s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes linesDrift {
+      from { background-position: 0 0; }
+      to   { background-position: 0 48px; }
+    }
+
+    #hero::after {
+      content: 'Scroll';
+      position: absolute;
+      bottom: clamp(1rem, 3vh, 2rem);
+      left: var(--section-padding);
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--ink-muted);
+      animation: pulseOpacity 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulseOpacity {
+      0%, 100% { opacity: 0.35; }
+      50%       { opacity: 0.8; }
+    }
+
+    #hero .section-content {
+      justify-content: space-between;
+      padding-top: clamp(3rem, 8vh, 7rem);
+      padding-bottom: clamp(2.5rem, 7vh, 5rem);
+    }
+
+    .hero-top { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+    .hero-eyebrow { margin-bottom: clamp(0.6rem, 1.8vh, 1.2rem); }
+
+    .hero-name { margin-bottom: clamp(0.8rem, 2vh, 1.6rem); }
+    .hero-name em { font-weight: 400; color: var(--ink-mid); }
+
+    .hero-tagline {
+      font-size: var(--tagline-size);
+      color: var(--ink-mid);
+      line-height: 1.6;
+      max-width: min(52ch, 80vw);
+      margin-bottom: clamp(1.2rem, 3vh, 2.5rem);
+    }
+
+    .hero-cta { display: flex; gap: clamp(1rem, 2.5vw, 1.75rem); align-items: center; flex-wrap: wrap; }
+
+    .btn-primary {
+      display: inline-block;
+      padding: 0.65rem 1.7rem;
+      background: var(--ink);
+      color: var(--bg);
+      font-family: var(--body);
+      font-size: var(--small-size);
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--ink-mid); transform: translateY(-1px); }
+
+    .btn-ghost {
+      font-size: var(--small-size);
+      color: var(--ink-light);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 1px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--ink); border-color: var(--ink); }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--rule);
+      padding-top: clamp(1rem, 2.5vh, 1.8rem);
+    }
+
+    .hstat { padding: 0 clamp(0.75rem, 2vw, 2rem) 0 0; }
+    .hstat + .hstat { padding-left: clamp(0.75rem, 2vw, 2rem); border-left: 1px solid var(--rule); }
+
+    .hstat-num {
+      font-family: var(--display);
+      font-size: clamp(1.8rem, 3.5vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+
+    .hstat-label {
+      font-size: var(--small-size);
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      line-height: 1.5;
+    }
+
+    /* =============================================
+       ABOUT
+       ============================================= */
+    #about { background: var(--bg); }
+
+    #about .section-content {
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: clamp(2rem, 6vw, 6rem);
+      align-items: center;
+    }
+
+    .about-heading { line-height: 1.1; }
+    .about-heading em { font-style: italic; font-weight: 400; color: var(--ink-mid); }
+
+    .about-text {
+      font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+      color: var(--ink-mid);
+      line-height: 1.88;
+      margin-bottom: var(--content-gap);
+    }
+    .about-text strong { color: var(--ink); font-weight: 600; }
+    .about-text:last-of-type { margin-bottom: 0; }
+
+    .about-currently {
+      border-top: 1px solid var(--rule);
+      padding-top: clamp(0.8rem, 2vh, 1.4rem);
+      margin-top: clamp(0.8rem, 2vh, 1.4rem);
+    }
+
+    .currently-label {
+      font-size: var(--small-size);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--ink-muted);
+      margin-bottom: 0.55rem;
+    }
+
+    .currently-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+    .chip {
+      font-size: var(--small-size);
+      padding: 0.22rem 0.65rem;
+      border: 1px solid var(--rule);
+      color: var(--ink-light);
+      letter-spacing: 0.04em;
+    }
+
+    /* =============================================
+       SKILLS
+       ============================================= */
+    #skills { background: var(--ink); color: var(--bg); }
+    #skills h2 { color: var(--bg); }
+    #skills .eyebrow { color: rgba(250,250,248,0.32); }
+    #skills .section-content { gap: clamp(1.2rem, 2.5vh, 2rem); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(1.5rem, 3vw, 3rem);
+      align-content: start;
+    }
+
+    .skill-cat > h3 {
+      font-family: var(--body);
+      font-size: var(--small-size);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(250,250,248,0.32);
+      margin-bottom: clamp(0.75rem, 1.8vh, 1.3rem);
+    }
+
+    .sbar { margin-bottom: 0.75rem; }
+    .sbar-label { font-size: var(--small-size); color: rgba(250,250,248,0.72); margin-bottom: 0.32rem; }
+    .sbar-track { height: 1px; background: rgba(250,250,248,0.1); position: relative; }
+    .sbar-fill {
+      position: absolute;
+      top: 0; left: 0;
+      height: 100%;
+      background: rgba(250,250,248,0.58);
+      width: 0;
+      transition: width 1.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.38rem; }
+    .tag {
+      font-size: var(--small-size);
+      padding: 0.2rem 0.58rem;
+      border: 1px solid rgba(250,250,248,0.14);
+      color: rgba(250,250,248,0.52);
+      letter-spacing: 0.03em;
+      cursor: default;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .tag:hover { border-color: rgba(250,250,248,0.45); color: rgba(250,250,248,0.9); }
+
+    /* =============================================
+       PROJECTS
+       ============================================= */
+    #projects { background: var(--bg); }
+    #projects .section-content { gap: clamp(1.2rem, 2.5vh, 2rem); }
+
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(1.5rem, 3vw, 2.5rem);
+    }
+
+    .proj-card { border-top: 2px solid var(--rule); padding-top: clamp(1rem, 2.2vh, 1.6rem); }
+    .proj-card.award { border-top-color: var(--gold); }
+
+    .proj-medal {
+      font-size: var(--small-size);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 0.45rem;
+    }
+    .proj-medal.neutral { color: var(--ink-muted); }
+
+    .proj-rank {
+      font-family: var(--display);
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+    .proj-rank.neutral { color: var(--ink); }
+    .proj-rank small { font-family: var(--body); font-size: clamp(0.75rem, 1.2vw, 0.9rem); font-weight: 400; color: var(--ink-muted); }
+
+    .proj-title {
+      font-family: var(--display);
+      font-size: clamp(0.9rem, 1.6vw, 1.08rem);
+      font-weight: 600;
+      line-height: 1.35;
+      margin-bottom: 0.55rem;
+    }
+
+    .proj-desc { font-size: var(--small-size); color: var(--ink-light); line-height: 1.76; margin-bottom: 0.7rem; }
+
+    .proj-tags { display: flex; flex-wrap: wrap; gap: 0.32rem; }
+    .proj-tag {
+      font-size: 0.6rem;
+      padding: 0.14rem 0.48rem;
+      background: var(--bg-warm);
+      color: var(--ink-light);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* =============================================
+       EXPERIENCE
+       ============================================= */
+    #experience { background: var(--bg-warm); }
+    #experience .section-content { gap: clamp(1rem, 2vh, 1.8rem); }
+
+    .timeline { display: flex; flex-direction: column; gap: clamp(1.2rem, 2.5vh, 2.2rem); }
+
+    .tl-item {
+      display: grid;
+      grid-template-columns: min(160px, 20vw) 1fr;
+      gap: 0 clamp(1.5rem, 3vw, 3rem);
+      border-left: 1px solid var(--rule);
+      padding-left: clamp(1.2rem, 2.5vw, 2.2rem);
+      position: relative;
+    }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: 0.45rem;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--ink);
+      border: 2px solid var(--bg-warm);
+    }
+
+    .tl-meta { padding-top: 0.1rem; }
+
+    /* Company logos — grayscale to match editorial tone */
+    .tl-logo {
+      height: 22px;
+      width: auto;
+      max-width: 96px;
+      object-fit: contain;
+      display: block;
+      margin-bottom: 0.55rem;
+      filter: grayscale(1);
+      opacity: 0.55;
+      transition: opacity 0.2s;
+    }
+    .tl-logo:hover { opacity: 0.85; }
+
+    .tl-co { font-family: var(--display); font-size: clamp(0.85rem, 1.5vw, 1rem); font-weight: 700; margin-bottom: 0.2rem; }
+    .tl-period, .tl-loc { font-size: var(--small-size); color: var(--ink-muted); line-height: 1.55; }
+
+    .tl-title {
+      font-family: var(--display);
+      font-size: clamp(0.9rem, 1.6vw, 1.06rem);
+      font-weight: 600;
+      margin-bottom: 0.55rem;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tl-badge {
+      font-family: var(--body);
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      background: var(--ink);
+      color: var(--bg);
+      padding: 0.13rem 0.48rem;
+    }
+
+    .tl-list { list-style: none; }
+    .tl-list li {
+      font-size: var(--small-size);
+      color: var(--ink-mid);
+      line-height: 1.72;
+      padding-left: 1rem;
+      position: relative;
+      margin-bottom: 0.3rem;
+    }
+    .tl-list li::before { content: '\2014'; position: absolute; left: 0; color: var(--ink-muted); }
+    .tl-list strong { color: var(--ink); font-weight: 600; }
+
+    /* =============================================
+       EARLIER WORK + EDUCATION
+       ============================================= */
+    #earlier { background: var(--bg); }
+    #earlier .section-content {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: clamp(2rem, 5vw, 5.5rem);
+      align-items: start;
+    }
+
+    .earlier-left h2 { margin-bottom: clamp(1rem, 2.5vh, 2rem); }
+
+    .edu-list { display: flex; flex-direction: column; gap: clamp(0.75rem, 1.8vh, 1.4rem); }
+    .edu-item { border-top: 1px solid var(--rule); padding-top: clamp(0.6rem, 1.5vh, 1rem); }
+
+    /* School logos (Google favicons are square PNGs) */
+    .edu-logo {
+      height: 20px;
+      width: 20px;
+      object-fit: contain;
+      display: block;
+      margin-bottom: 0.45rem;
+      border-radius: 3px;
+      filter: grayscale(1);
+      opacity: 0.55;
+    }
+
+    .edu-deg { font-family: var(--display); font-size: clamp(0.88rem, 1.5vw, 1rem); font-weight: 600; margin-bottom: 0.2rem; }
+    .edu-school { font-size: var(--small-size); color: var(--ink-light); margin-bottom: 0.15rem; }
+    .edu-year   { font-size: var(--small-size); color: var(--ink-muted); letter-spacing: 0.05em; }
+
+    .cert-note {
+      margin-top: clamp(0.75rem, 1.8vh, 1.4rem);
+      padding-top: clamp(0.6rem, 1.5vh, 1rem);
+      border-top: 1px solid var(--rule);
+      font-size: var(--small-size);
+      color: var(--ink-muted);
+    }
+
+    /* Earlier timeline dots for non-warm bg */
+    #earlier .tl-item::before { border-color: var(--bg); }
+
+    /* =============================================
+       CONTACT
+       ============================================= */
+    #contact { background: var(--ink); color: var(--bg); }
+    #contact h2 { color: var(--bg); }
+    #contact .eyebrow { color: rgba(250,250,248,0.32); }
+    #contact .section-content { gap: clamp(0.8rem, 2vh, 1.5rem); }
+
+    .contact-sub {
+      font-size: var(--tagline-size);
+      color: rgba(250,250,248,0.48);
+      max-width: 42ch;
+      line-height: 1.62;
+    }
+
+    .contact-email {
+      display: block;
+      font-family: var(--display);
+      font-size: clamp(1.1rem, 2.8vw, 2.2rem);
+      color: var(--bg);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(250,250,248,0.18);
+      padding-bottom: 0.5rem;
+      width: fit-content;
+      transition: border-color 0.2s, opacity 0.2s;
+    }
+    .contact-email:hover { border-color: rgba(250,250,248,0.55); opacity: 0.8; }
+
+    .contact-links { display: flex; flex-wrap: wrap; gap: clamp(1.5rem, 3.5vw, 3rem); }
+    .clink {
+      font-size: var(--small-size);
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      color: rgba(250,250,248,0.38);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .clink:hover { color: rgba(250,250,248,0.85); }
+
+    .contact-sig {
+      position: absolute;
+      bottom: clamp(1rem, 3vh, 2rem);
+      right: var(--section-padding);
+      font-family: var(--display);
+      font-size: clamp(2rem, 5vw, 4.5rem);
+      font-weight: 700;
+      font-style: italic;
+      color: rgba(250,250,248,0.04);
+      letter-spacing: -0.02em;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* =============================================
+       TRAITS SECTION
+       ============================================= */
+    #traits .section-content { gap: clamp(0.8rem, 1.8vh, 1.4rem); }
+    .traits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(0.6rem, 1.2vw, 1rem);
+      width: 100%;
+      max-width: 1100px;
+    }
+    .trait-card {
+      background: var(--bg-warm);
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: clamp(0.9rem, 1.5vw, 1.4rem);
+    }
+    .trait-icon { font-size: clamp(1.1rem, 1.8vw, 1.5rem); margin-bottom: 0.3rem; }
+    .trait-title {
+      font-family: var(--display);
+      font-size: var(--h3-size);
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+    }
+    .trait-desc {
+      font-family: var(--body);
+      font-size: var(--small-size);
+      color: var(--ink-mid);
+      line-height: 1.65;
+    }
+
+    /* =============================================
+       PHILOSOPHY SECTION
+       ============================================= */
+    #philosophy { background: var(--bg-warm); }
+    #philosophy .section-content { gap: clamp(0.8rem, 1.8vh, 1.4rem); }
+    .philo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: clamp(1.5rem, 3vw, 3rem);
+      row-gap: clamp(0.5rem, 1.2vh, 0.9rem);
+      width: 100%;
+      max-width: 1000px;
+    }
+    .philo-item {
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-start;
+    }
+    .philo-num {
+      font-family: var(--display);
+      font-size: var(--h3-size);
+      color: var(--gold);
+      font-weight: 700;
+      flex-shrink: 0;
+      line-height: 1.3;
+      min-width: 2.2rem;
+    }
+    .philo-text {
+      font-family: var(--body);
+      font-size: var(--small-size);
+      color: var(--ink-mid);
+      line-height: 1.65;
+    }
+    .philo-text strong { color: var(--ink); }
+
+    /* =============================================
+       AI USAGE SECTION
+       ============================================= */
+    #ai-usage { background: var(--ink); color: var(--bg); }
+    #ai-usage .section-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+    }
+    .ai-left { display: flex; flex-direction: column; gap: clamp(0.6rem, 1.2vh, 1rem); }
+    .ai-left .eyebrow { color: rgba(250,250,248,0.5); }
+    .ai-left h2 { color: var(--bg); margin-top: 0.4rem; }
+    .ai-token-display {
+      margin-top: clamp(0.8rem, 1.5vh, 1.4rem);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .ai-token-big {
+      font-family: var(--display);
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+    .ai-token-label {
+      font-family: var(--body);
+      font-size: var(--body-size);
+      color: rgba(250,250,248,0.55);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .ai-token-breakdown {
+      font-family: var(--body);
+      font-size: var(--small-size);
+      color: rgba(250,250,248,0.45);
+      margin-top: 0.2rem;
+    }
+    .ai-right {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.5rem, 1.2vh, 0.9rem);
+    }
+    .ai-case {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: clamp(0.7rem, 1.2vw, 1rem) clamp(0.8rem, 1.4vw, 1.2rem);
+      border: 1px solid rgba(250,250,248,0.1);
+      border-radius: 4px;
+      background: rgba(250,250,248,0.04);
+    }
+    .ai-case-icon { font-size: clamp(1rem, 1.6vw, 1.3rem); flex-shrink: 0; }
+    .ai-case-body { display: flex; flex-direction: column; gap: 0.15rem; }
+    .ai-case-title {
+      font-family: var(--display);
+      font-size: var(--h3-size);
+      font-weight: 600;
+      color: rgba(250,250,248,0.9);
+    }
+    .ai-case-desc {
+      font-family: var(--body);
+      font-size: var(--small-size);
+      color: rgba(250,250,248,0.5);
+      line-height: 1.55;
+    }
+
+    /* =============================================
+       RESUME SECTION
+       ============================================= */
+    #resume .section-content {
+      gap: clamp(0.6rem, 1.2vh, 1rem);
+      align-items: stretch;
+    }
+    .resume-frame {
+      flex: 1;
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      width: 100%;
+      min-height: 0;
+    }
+    .resume-placeholder {
+      flex: 1;
+      border: 2px dashed var(--rule);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.8rem;
+      color: var(--ink-muted);
+      font-family: var(--body);
+      font-size: var(--body-size);
+    }
+    .resume-placeholder a {
+      color: var(--gold);
+      font-size: var(--small-size);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* =============================================
+       RESPONSIVE
+       ============================================= */
+    @media (max-width: 768px) {
+      .nav-dots { right: 0.5rem; }
+      .hero-stats { grid-template-columns: 1fr 1fr; }
+      .hstat:nth-child(3) { border-left: none; padding-left: 0; }
+      .traits-grid { grid-template-columns: 1fr 1fr; }
+      .philo-grid { grid-template-columns: 1fr; }
+      #ai-usage .section-content { grid-template-columns: 1fr; }
+      .ai-token-big { font-size: clamp(2.5rem, 12vw, 4rem); }
+      #about .section-content { grid-template-columns: 1fr; gap: var(--content-gap); }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .proj-grid { grid-template-columns: 1fr 1fr; }
+      .proj-grid .proj-card:nth-child(3) { display: none; }
+      .tl-item { grid-template-columns: 1fr; gap: 0.35rem; }
+      .tl-meta { display: flex; gap: 1rem; flex-wrap: wrap; }
+      #earlier .section-content { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV DOTS (injected by JS) -->
+  <nav class="nav-dots" aria-label="Section navigation"></nav>
+
+  <!-- SECTION 1: HERO -->
+  <section class="section" id="hero">
+    <div class="section-content">
+      <div class="hero-top">
+        <p class="eyebrow hero-eyebrow reveal">Staff Data Scientist &nbsp;&middot;&nbsp; AI / ML Engineer</p>
+        <h1 class="hero-name reveal">Yi<br><em>Huang.</em></h1>
+        <p class="hero-tagline reveal">
+          I turn early behavioral signals into long-term predictions &mdash; and translate the math into decisions that ship to production at eight-figure scale.
+        </p>
+        <div class="hero-cta reveal">
+          <a href="#projects" class="btn-primary" onclick="scrollToId('projects');return false;">View My Work</a>
+          <a href="mailto:yihuanghz95@gmail.com" class="btn-ghost">Get in Touch &rarr;</a>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat">
+          <div class="hstat-num" data-count="6" data-suffix="+">0+</div>
+          <div class="hstat-label">Years shipping<br>production ML</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-num" data-prefix="$" data-count="8" data-suffix="-fig">$0</div>
+          <div class="hstat-label">Annual cost savings<br>at TikTok</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-num" data-count="2">0</div>
+          <div class="hstat-label">Kaggle silver medals<br>top 3% globally</div>
+        </div>
+        <div class="hstat">
+          <div class="hstat-num" data-count="60" data-suffix="%">0%</div>
+          <div class="hstat-label">Decision cycle cut<br>T+10 &rarr; T+4</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: ABOUT -->
+  <section class="section" id="about">
+    <div class="section-content">
+      <div class="about-left">
+        <p class="eyebrow reveal">About</p>
+        <h2 class="about-heading reveal">Math<br>behind<br><em>the model.</em><br>Leadership<br>to ship it.</h2>
+      </div>
+      <div class="about-right">
+        <p class="about-text reveal">
+          I started in <strong>transportation engineering</strong> &mdash; which taught me that real systems are noisy, incomplete, and under pressure long before I touched a notebook. That foundation in rigorous quantitative thinking is what I bring to every ML problem I touch.
+        </p>
+        <p class="about-text reveal">
+          At TikTok, I rebuilt the user growth prediction engine from the ground up &mdash; a <strong>hierarchical Bayesian cold-start system</strong> layered on an MMOE multi-task framework &mdash; cutting decision cycles by 60% and generating eight-figure annual savings. At Pocket Gems, my LTV models moved eight-figure UA budgets. At Deloitte, 30M customer records became a strategy that tripled conversion.
+        </p>
+        <p class="about-text reveal">
+          I'm equally comfortable deriving the math and sitting with Finance and Product to explain why it matters. That <strong>translation layer &mdash; from model to decision</strong> &mdash; is where most data scientists stop. It's where I start.
+        </p>
+        <div class="about-currently reveal">
+          <div class="currently-label">Currently</div>
+          <div class="currently-chips">
+            <span class="chip">Building: multi-app ML ecosystem @ TikTok</span>
+            <span class="chip">Learning: advanced Bayesian time-series</span>
+            <span class="chip">Competing: Kaggle NLP challenges</span>
+            <span class="chip">Watching: anime &amp; collecting TGC cards</span>
+            <span class="chip">Jamming: R&amp;B &amp; learning electric guitar</span>
+            <span class="chip">Training: gym</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: SKILLS -->
+  <section class="section" id="skills">
+    <div class="section-content">
+      <div class="reveal">
+        <p class="eyebrow">Technical Expertise</p>
+        <h2 style="color:var(--bg);margin-top:0.4rem;">The stack,&nbsp;<em style="color:rgba(250,250,248,0.5)">in depth</em></h2>
+      </div>
+      <div class="skills-grid">
+        <!-- ML / AI -->
+        <div class="skill-cat reveal">
+          <h3>ML &amp; AI</h3>
+          <div class="sbar"><div class="sbar-label">Multi-Task Learning (MMOE)</div><div class="sbar-track"><div class="sbar-fill" data-w="95" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="MMOE proficiency"></div></div></div>
+          <div class="sbar"><div class="sbar-label">Gradient Boosting (LightGBM/XGB)</div><div class="sbar-track"><div class="sbar-fill" data-w="97" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Gradient Boosting proficiency"></div></div></div>
+          <div class="sbar"><div class="sbar-label">Hierarchical Bayesian Models</div><div class="sbar-track"><div class="sbar-fill" data-w="90" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Bayesian proficiency"></div></div></div>
+          <div class="sbar"><div class="sbar-label">Time-Series Forecasting</div><div class="sbar-track"><div class="sbar-fill" data-w="93" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Time-Series proficiency"></div></div></div>
+          <div class="sbar"><div class="sbar-label">LTV / Survival Modeling</div><div class="sbar-track"><div class="sbar-fill" data-w="92" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="LTV proficiency"></div></div></div>
+          <div class="sbar"><div class="sbar-label">Deep Learning (CNN, Transformer)</div><div class="sbar-track"><div class="sbar-fill" data-w="85" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Deep Learning proficiency"></div></div></div>
+          <div class="sbar"><div class="sbar-label">Reinforcement Learning (PPO)</div><div class="sbar-track"><div class="sbar-fill" data-w="74" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="RL proficiency"></div></div></div>
+        </div>
+        <!-- Languages -->
+        <div class="skill-cat reveal">
+          <h3>Languages</h3>
+          <div class="sbar"><div class="sbar-label">Python</div><div class="sbar-track"><div class="sbar-fill" data-w="98" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Python proficiency"></div></div></div>
+          <div class="sbar"><div class="sbar-label">SQL (Hive, BigQuery, Spark)</div><div class="sbar-track"><div class="sbar-fill" data-w="95" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="SQL proficiency"></div></div></div>
+          <div class="sbar"><div class="sbar-label">PyTorch</div><div class="sbar-track"><div class="sbar-fill" data-w="87" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="PyTorch proficiency"></div></div></div>
+          <div class="sbar"><div class="sbar-label">PySpark / H2O</div><div class="sbar-track"><div class="sbar-fill" data-w="80" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="PySpark proficiency"></div></div></div>
+          <div class="sbar"><div class="sbar-label">HuggingFace Transformers</div><div class="sbar-track"><div class="sbar-fill" data-w="80" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="HuggingFace proficiency"></div></div></div>
+          <div class="sbar"><div class="sbar-label">R</div><div class="sbar-track"><div class="sbar-fill" data-w="72" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="R proficiency"></div></div></div>
+        </div>
+        <!-- Platform -->
+        <div class="skill-cat reveal">
+          <h3>Platform &amp; MLOps</h3>
+          <div class="tag-cloud">
+            <span class="tag">BigQuery</span><span class="tag">Hive SQL</span>
+            <span class="tag">AWS S3/EMR</span><span class="tag">GCP</span>
+            <span class="tag">Kubeflow</span><span class="tag">Jenkins</span>
+            <span class="tag">Docker</span><span class="tag">MongoDB</span>
+            <span class="tag">Git</span><span class="tag">Flask</span>
+            <span class="tag">Tableau</span><span class="tag">Plotly</span>
+          </div>
+        </div>
+        <!-- Domains -->
+        <div class="skill-cat reveal">
+          <h3>Domains</h3>
+          <div class="tag-cloud">
+            <span class="tag">User Behavior Modeling</span>
+            <span class="tag">Monetization &amp; LTV</span>
+            <span class="tag">Cold-Start Forecasting</span>
+            <span class="tag">Causal Inference</span>
+            <span class="tag">A/B Experimentation</span>
+            <span class="tag">Attribution Modeling</span>
+            <span class="tag">Anomaly Detection</span>
+            <span class="tag">NLP / Multimodal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: PROJECTS -->
+  <section class="section" id="projects">
+    <div class="section-content">
+      <div class="reveal">
+        <p class="eyebrow">Competitions &amp; Projects</p>
+        <h2 style="margin-top:0.4rem;">Proof of&nbsp;<em style="color:var(--ink-mid)">craft</em></h2>
+      </div>
+      <div class="proj-grid">
+        <div class="proj-card award reveal">
+          <div class="proj-medal">&#x1F948; Kaggle Silver Medal <img src="https://cdn.simpleicons.org/kaggle/b07d2e" alt="Kaggle" style="height:13px;width:auto;vertical-align:middle;margin-left:0.3rem;" onerror="this.style.display='none'"></div>
+          <div class="proj-rank">#21 <small>/ 3,547 teams</small></div>
+          <div class="proj-title">GoDaddy Microbusiness Density Forecasting</div>
+          <p class="proj-desc">Designed and tuned a boosting tree ensemble for multi-step county-level microbusiness density forecasting. Top 1% globally &mdash; outranked 3,526 competing teams.</p>
+          <div class="proj-tags"><span class="proj-tag">LightGBM</span><span class="proj-tag">Feature Eng.</span><span class="proj-tag">Time-Series</span></div>
+        </div>
+        <div class="proj-card award reveal">
+          <div class="proj-medal">&#x1F948; Kaggle Silver Medal <img src="https://cdn.simpleicons.org/kaggle/b07d2e" alt="Kaggle" style="height:13px;width:auto;vertical-align:middle;margin-left:0.3rem;" onerror="this.style.display='none'"></div>
+          <div class="proj-rank">#68 <small>/ 2,106 teams</small></div>
+          <div class="proj-title">CommonLit: Evaluate Student Summaries</div>
+          <p class="proj-desc">Ensembled BERT-based and tree-based models via stacking and bagging to predict student writing quality. Trained across RTX 3080, GCP V100, and 4&times;A4090 GPUs.</p>
+          <div class="proj-tags"><span class="proj-tag">BERT</span><span class="proj-tag">HuggingFace</span><span class="proj-tag">Ensemble</span><span class="proj-tag">NLP</span></div>
+        </div>
+        <div class="proj-card reveal">
+          <div class="proj-medal neutral">Distributed Systems &middot; UC Berkeley</div>
+          <div class="proj-rank neutral">80% <small style="color:var(--ink-muted)">faster processing</small></div>
+          <div class="proj-title">End-to-End Distributed ML Pipeline</div>
+          <p class="proj-desc">Stored 26.3 GB JSON on AWS S3, queried with MongoDB, benchmarked EMR cluster configs, and built ML models with PySpark and H2O &mdash; cutting data processing time by 80%.</p>
+          <div class="proj-tags"><span class="proj-tag">PySpark</span><span class="proj-tag">AWS EMR</span><span class="proj-tag">MongoDB</span><span class="proj-tag">H2O</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: EXPERIENCE (TikTok + Pocket Gems) -->
+  <section class="section" id="experience">
+    <div class="section-content">
+      <div class="reveal">
+        <p class="eyebrow">Work Experience</p>
+        <h2 style="margin-top:0.4rem;">Where I&rsquo;ve&nbsp;<em style="color:var(--ink-mid)">built things</em></h2>
+      </div>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <div class="tl-meta">
+            <img src="https://cdn.simpleicons.org/tiktok/191917" alt="TikTok" class="tl-logo" onerror="this.src='https://www.google.com/s2/favicons?domain=tiktok.com&sz=64';this.onerror=null">
+            <div class="tl-co">TikTok</div>
+            <div class="tl-period">Nov 2023 &mdash; Present</div>
+            <div class="tl-loc">San Jose, CA</div>
+          </div>
+          <div>
+            <div class="tl-title">Staff Data Scientist &mdash; Quant Modeling <span class="tl-badge">Tech Lead</span></div>
+            <ul class="tl-list">
+              <li>Led redesign of user growth prediction into <strong>LightGBM + MMOE multi-task framework</strong> &mdash; decision cycles T+10 &rarr; T+4, <strong>eight-figure annual savings</strong> across TikTok, Lemon8, and Pine.</li>
+              <li>Architected <strong>hierarchical Bayesian cold-start</strong> system inferring long-term outcomes from short windows, borrowing strength across cohorts, regions, and channels.</li>
+              <li>Tech-led 4-person global team; established evaluation methodology: offline validation + online A/B + business-impact tracking with regression monitoring.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="tl-item reveal">
+          <div class="tl-meta">
+            <img src="https://www.google.com/s2/favicons?domain=pocketgems.com&sz=64" alt="Pocket Gems" class="tl-logo" onerror="this.style.display='none'">
+            <div class="tl-co">Pocket Gems</div>
+            <div class="tl-period">Jan 2021 &mdash; Nov 2023</div>
+            <div class="tl-loc">San Francisco, CA</div>
+          </div>
+          <div>
+            <div class="tl-title">Data Scientist &mdash; Product &amp; Marketing</div>
+            <ul class="tl-list">
+              <li>Built <strong>LTV prediction models</strong> (LightGBM + AutoML) across 3 live games &mdash; <strong>8% MAE reduction</strong>, influenced eight-figure UA budget allocation.</li>
+              <li>Built multi-touch attribution pipelines (Jenkins + BigQuery), a <strong>behavioral anomaly detection system</strong> flagging thousands of cheating accounts, and a <strong>PPO-based RL agent</strong> in Unity ML-Agents.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: EARLIER WORK + EDUCATION -->
+  <section class="section" id="earlier">
+    <div class="section-content">
+      <div class="earlier-left">
+        <p class="eyebrow reveal">Earlier Work</p>
+        <h2 style="margin-top:0.4rem;" class="reveal">Before&nbsp;<em style="color:var(--ink-mid)">TikTok</em></h2>
+        <div class="timeline" style="margin-top:clamp(1rem,2.5vh,2rem)">
+          <div class="tl-item reveal">
+            <div class="tl-meta">
+              <img src="https://cdn.simpleicons.org/deloitte/191917" alt="Deloitte" class="tl-logo" onerror="this.src='https://www.google.com/s2/favicons?domain=deloitte.com&sz=64';this.onerror=null">
+              <div class="tl-co">Deloitte Analytics</div>
+              <div class="tl-period">May 2019 &mdash; Apr 2020</div>
+              <div class="tl-loc">Beijing, China</div>
+            </div>
+            <div>
+              <div class="tl-title">Data Scientist &amp; Consulting Analyst</div>
+              <ul class="tl-list">
+                <li>Led 4-person team; <strong>7 ML models on 30M customer records</strong>; strategies presented to bank VP leadership.</li>
+                <li>Insurance propensity models on 5M+ records &rarr; <strong>3&times; conversion rate</strong> (3% &rarr; 9%) vs. control.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tl-item reveal">
+            <div class="tl-meta">
+              <img src="https://www.google.com/s2/favicons?domain=sensomics.com&sz=64" alt="SensOmics" class="tl-logo" onerror="this.style.display='none'">
+              <div class="tl-co">SensOmics</div>
+              <div class="tl-period">Feb &mdash; Apr 2019</div>
+              <div class="tl-loc">Hangzhou, China</div>
+            </div>
+            <div>
+              <div class="tl-title">ML Algorithm Engineer Intern</div>
+              <ul class="tl-list">
+                <li><strong>CNN + Transformer in PyTorch</strong> for autism diagnosis from 70 GB fMRI 3D time-series on 10-GPU cluster &mdash; +5% accuracy.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="earlier-right">
+        <p class="eyebrow reveal">Education</p>
+        <div class="edu-list" style="margin-top:0.6rem">
+          <div class="edu-item reveal">
+            <img src="https://www.google.com/s2/favicons?domain=usfca.edu&sz=64" alt="University of San Francisco" class="edu-logo" onerror="this.style.display='none'">
+            <div class="edu-deg">MS Data Science</div>
+            <div class="edu-school">University of San Francisco</div>
+            <div class="edu-year">2020 &ndash; 2021</div>
+          </div>
+          <div class="edu-item reveal">
+            <img src="https://www.google.com/s2/favicons?domain=northwestern.edu&sz=64" alt="Northwestern University" class="edu-logo" onerror="this.style.display='none'">
+            <div class="edu-deg">MS Transportation Engineering</div>
+            <div class="edu-school">Northwestern University</div>
+            <div class="edu-year">2017 &ndash; 2018</div>
+          </div>
+          <div class="edu-item reveal">
+            <img src="https://www.google.com/s2/favicons?domain=dlut.edu.cn&sz=64" alt="Dalian University of Technology" class="edu-logo" onerror="this.style.display='none'">
+            <div class="edu-deg">BS Transportation Engineering</div>
+            <div class="edu-school">Dalian University of Technology</div>
+            <div class="edu-year">2013 &ndash; 2017</div>
+          </div>
+        </div>
+        <div class="cert-note reveal">
+          <strong style="color:var(--ink-light)">Certification</strong><br>
+          Alibaba Cloud Certified Professional &middot; 2019
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: WORK TRAITS -->
+  <section class="section" id="traits">
+    <div class="section-content">
+      <div class="reveal">
+        <p class="eyebrow">Work Traits</p>
+        <h2 style="margin-top:0.4rem;">What sets me&nbsp;<em style="color:var(--ink-mid)">apart</em></h2>
+      </div>
+      <div class="traits-grid">
+        <div class="trait-card reveal">
+          <div class="trait-icon">⚡</div>
+          <div class="trait-title">Parallel Execution</div>
+          <p class="trait-desc">At TikTok, simultaneously driving work across multiple dimensions: model design, development, deployment, and maintenance; defining and computing metric systems; quantifying abstract business problems; building enterprise data pipelines; strategy optimization; and day-to-day on-call triage.</p>
+        </div>
+        <div class="trait-card reveal">
+          <div class="trait-icon">🏔️</div>
+          <div class="trait-title">Ownership Under Pressure</div>
+          <p class="trait-desc">When key team members departed and headcount was severely constrained, independently took over all core team projects and fully upgraded the entire model system — not just completing the original workload, but raising the delivery scope to a higher level.</p>
+        </div>
+        <div class="trait-card reveal">
+          <div class="trait-icon">🌏</div>
+          <div class="trait-title">Global Leadership</div>
+          <p class="trait-desc">Led cross-national DS &amp; DE teams, building trust and collaboration across cultural differences. Mentored members from diverse backgrounds, helping each find their own growth path.</p>
+        </div>
+        <div class="trait-card reveal">
+          <div class="trait-icon">🤝</div>
+          <div class="trait-title">Cross-Functional Collaboration</div>
+          <p class="trait-desc">Deep collaboration with Finance, Growth, Strategy, and Data Engineering. Making model outputs direct inputs to business decisions — not just another report.</p>
+        </div>
+        <div class="trait-card reveal">
+          <div class="trait-icon">📚</div>
+          <div class="trait-title">Technical Culture Building</div>
+          <p class="trait-desc">Led weekly knowledge-sharing sessions, converting individual expertise into team-wide assets and continuously raising the technical baseline across the group.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8: PHILOSOPHY -->
+  <section class="section" id="philosophy">
+    <div class="section-content">
+      <div class="reveal">
+        <p class="eyebrow">My Philosophy</p>
+        <h2 style="margin-top:0.4rem;">The thinking <em style="color:var(--ink-mid)">behind the work</em></h2>
+      </div>
+      <div class="philo-grid">
+        <div class="philo-item reveal">
+          <div class="philo-num">01</div>
+          <p class="philo-text"><strong>Define your own success metrics.</strong> Society's broad standards are reference, not mandate. I guide myself toward work that feels genuinely meaningful rather than chasing externally defined success.</p>
+        </div>
+        <div class="philo-item reveal">
+          <div class="philo-num">02</div>
+          <p class="philo-text"><strong>Cyberpunk sparked the obsession.</strong> My pursuit of AI traces back to Ghost in the Shell — the boundary between human and machine, the nature of consciousness. This isn't just a career; it's a worldview.</p>
+        </div>
+        <div class="philo-item reveal">
+          <div class="philo-num">03</div>
+          <p class="philo-text"><strong>Technology serves business reality.</strong> Companies need monetization. The best model finds the exact balance between technical precision and business output — not paper-optimal solutions.</p>
+        </div>
+        <div class="philo-item reveal">
+          <div class="philo-num">04</div>
+          <p class="philo-text"><strong>First principles.</strong> Facing a complex problem, strip all assumptions and derive from the most fundamental logic — not convention or empiricism.</p>
+        </div>
+        <div class="philo-item reveal">
+          <div class="philo-num">05</div>
+          <p class="philo-text"><strong>Kill the curse of knowledge.</strong> Expressing complex ideas in the simplest possible language so others understand in 30 seconds — this is a severely underrated core skill.</p>
+        </div>
+        <div class="philo-item reveal">
+          <div class="philo-num">06</div>
+          <p class="philo-text"><strong>Underdog mindset, stay humble.</strong> Earlier in life I just wanted to play games — no fancy background. Finding ML/AI gave me real intrinsic drive. That journey keeps me from getting complacent, and from underestimating anyone.</p>
+        </div>
+        <div class="philo-item reveal">
+          <div class="philo-num">07</div>
+          <p class="philo-text"><strong>Go to the bottom of the code and the logic.</strong> Not satisfied with calling APIs and skimming docs — I want to know why it works the way it does, and what happens when you change the approach.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 9: AI USAGE -->
+  <section class="section" id="ai-usage">
+    <div class="section-content">
+      <div class="ai-left">
+        <p class="eyebrow reveal">Human + AI</p>
+        <h2 class="reveal">I don't just build AI —<br><em style="color:rgba(250,250,248,0.45)">I live in it.</em></h2>
+        <p class="reveal" style="font-family:var(--body);font-size:var(--body-size);color:rgba(250,250,248,0.55);line-height:1.7;max-width:38ch;">
+          Claude is embedded in how I work every day — from model design to stakeholder communication. These are real API tokens from active usage, not a demo.
+        </p>
+        <div class="ai-token-display reveal">
+          <div class="ai-token-big">2.76M</div>
+          <div class="ai-token-label">Claude API tokens consumed</div>
+          <div class="ai-token-breakdown">&#x2191;&thinsp;2.73M input &nbsp;&middot;&nbsp; 35.4K output</div>
+        </div>
+      </div>
+      <div class="ai-right">
+        <div class="ai-case reveal">
+          <div class="ai-case-icon">🔧</div>
+          <div class="ai-case-body">
+            <div class="ai-case-title">ML R&amp;D Acceleration</div>
+            <div class="ai-case-desc">Code generation, debugging, architecture review, and rapid prototyping of model ideas before committing to full experiments.</div>
+          </div>
+        </div>
+        <div class="ai-case reveal">
+          <div class="ai-case-icon">🔬</div>
+          <div class="ai-case-body">
+            <div class="ai-case-title">Research Synthesis</div>
+            <div class="ai-case-desc">Deep-diving papers, benchmarking approaches, and stress-testing assumptions on novel model architectures.</div>
+          </div>
+        </div>
+        <div class="ai-case reveal">
+          <div class="ai-case-icon">📝</div>
+          <div class="ai-case-body">
+            <div class="ai-case-title">Technical Communication</div>
+            <div class="ai-case-desc">Drafting model design docs, PRDs, and stakeholder write-ups that translate math into decisions Finance and Product can act on.</div>
+          </div>
+        </div>
+        <div class="ai-case reveal">
+          <div class="ai-case-icon">🎯</div>
+          <div class="ai-case-body">
+            <div class="ai-case-title">Problem Decomposition</div>
+            <div class="ai-case-desc">Converting vague business questions into model specs — clarifying what to predict, what to optimize, and what success looks like.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 10: RESUME -->
+  <section class="section" id="resume">
+    <div class="section-content">
+      <div class="reveal">
+        <p class="eyebrow">Resume</p>
+        <h2 style="margin-top:0.4rem;">Original&nbsp;<em style="color:var(--ink-mid)">Resume</em></h2>
+      </div>
+      <iframe
+        class="resume-frame reveal"
+        src="Yi_Huang_Resume_quant_v3.pdf"
+        title="Yi Huang Resume"
+        aria-label="Yi Huang Resume PDF">
+      </iframe>
+    </div>
+  </section>
+
+  <!-- SECTION 11: CONTACT -->
+  <section class="section" id="contact">
+    <div class="section-content">
+      <p class="eyebrow reveal">Contact</p>
+      <h2 style="margin-top:0.4rem;" class="reveal">Let&rsquo;s build<br><em>something that matters.</em></h2>
+      <p class="contact-sub reveal">
+        Open to senior IC and tech lead roles in applied ML &mdash; especially where models make real business decisions, not just benchmarks.
+      </p>
+      <a href="mailto:yihuanghz95@gmail.com" class="contact-email reveal" aria-label="Send email to Yi Huang">
+        yihuanghz95@gmail.com
+      </a>
+      <div class="contact-links reveal">
+        <a href="https://linkedin.com/in/yi-huang-ds/" target="_blank" class="clink" aria-label="Yi Huang on LinkedIn">LinkedIn &rarr;</a>
+        <a href="tel:+14243329574" class="clink" aria-label="Call Yi Huang">(+1) 424-332-9574</a>
+        <a href="#hero" onclick="scrollToId('hero');return false;" class="clink" aria-label="Back to top">Back to top &uarr;</a>
+      </div>
+    </div>
+    <div class="contact-sig" aria-hidden="true">Yi Huang</div>
+  </section>
+
+  <!-- =============================================
+       PORTFOLIO CONTROLLER
+       - Section detection via IntersectionObserver
+       - Keyboard navigation (Arrow keys)
+       - Touch / swipe support
+       - .reveal animations
+       - Skill bar animations
+       - Counter animations
+       - Nav dot highlighting
+       ============================================= -->
+  <script>
+    /* Section registry */
+    const sections = Array.from(document.querySelectorAll('.section'));
+    const navContainer = document.querySelector('.nav-dots');
+    const dots = [];
+    let currentIdx = 0;
+
+    /* Build nav dots */
+    const sectionLabels = ['Hero','About','Skills','Projects','Experience','Earlier','Traits','Philosophy','AI Usage','Resume','Contact'];
+    sections.forEach((sec, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'nav-dot';
+      btn.setAttribute('aria-label', 'Go to ' + (sectionLabels[i] || sec.id) + ' section');
+      btn.setAttribute('aria-current', i === 0 ? 'true' : 'false');
+      btn.addEventListener('click', () => scrollToSection(i));
+      navContainer.appendChild(btn);
+      dots.push(btn);
+    });
+
+    function scrollToSection(idx) {
+      sections[idx].scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function scrollToId(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+    window.scrollToId = scrollToId;
+
+    function setActive(idx) {
+      dots.forEach((d, i) => d.setAttribute('aria-current', i === idx ? 'true' : 'false'));
+      currentIdx = idx;
+    }
+
+    /* IntersectionObserver: section visibility */
+    const sectionIO = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const idx = sections.indexOf(e.target);
+          setActive(idx);
+          e.target.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+          if (e.target.id === 'skills') animateBars();
+          if (e.target.id === 'hero') animateCounters();
+        }
+      });
+    }, { threshold: 0.45 });
+
+    sections.forEach(s => sectionIO.observe(s));
+
+    /* Keyboard navigation */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+        e.preventDefault();
+        if (currentIdx < sections.length - 1) scrollToSection(currentIdx + 1);
+      }
+      if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+        e.preventDefault();
+        if (currentIdx > 0) scrollToSection(currentIdx - 1);
+      }
+    });
+
+    /* Touch / swipe support */
+    let touchStartY = 0, touchStartTime = 0;
+    document.addEventListener('touchstart', e => {
+      touchStartY = e.changedTouches[0].clientY;
+      touchStartTime = Date.now();
+    }, { passive: true });
+    document.addEventListener('touchend', e => {
+      const dy = touchStartY - e.changedTouches[0].clientY;
+      const dt = Date.now() - touchStartTime;
+      if (Math.abs(dy) > 60 && dt < 400) {
+        if (dy > 0 && currentIdx < sections.length - 1) scrollToSection(currentIdx + 1);
+        if (dy < 0 && currentIdx > 0) scrollToSection(currentIdx - 1);
+      }
+    }, { passive: true });
+
+    /* Skill bar animation */
+    let barsAnimated = false;
+    function animateBars() {
+      if (barsAnimated) return;
+      barsAnimated = true;
+      document.querySelectorAll('.sbar-fill').forEach(bar => {
+        const w = bar.dataset.w;
+        bar.style.width = w + '%';
+        bar.setAttribute('aria-valuenow', w);
+      });
+    }
+
+    /* Counter animation */
+    let countersAnimated = false;
+    function animateCounters() {
+      if (countersAnimated) return;
+      countersAnimated = true;
+      document.querySelectorAll('[data-count]').forEach((el, i) => {
+        const target = parseInt(el.dataset.count, 10);
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        const dur = 1500;
+        setTimeout(() => {
+          const t0 = performance.now();
+          function tick(now) {
+            const p = Math.min((now - t0) / dur, 1);
+            const ease = 1 - Math.pow(1 - p, 3);
+            el.textContent = prefix + Math.floor(ease * target) + suffix;
+            if (p < 1) requestAnimationFrame(tick);
+            else el.textContent = prefix + target + suffix;
+          }
+          requestAnimationFrame(tick);
+        }, i * 120);
+      });
+    }
+
+    /* Trigger hero on load */
+    animateCounters();
+    sections[0].querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+  </script>
+
+</body>
+</html>
